@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expedición Colombia: Exploradores de la Biodiversidad</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
+        body { font-family: 'Outfit', sans-serif; }
+        .slide-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+
+    <!-- BARRA SUPERIOR GLOBAL CON BOTÓN VOLVER AL INICIO -->
+    <header class="bg-emerald-900 border-b border-emerald-700 p-4 shadow-md flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="goToScreen('homeScreen')">
+            <i class="fa-solid fa-compass text-amber-400 text-2xl animate-spin-slow"></i>
+            <span class="font-extrabold text-lg tracking-wider text-white">EXPEDICIÓN COLOMBIA</span>
+        </div>
+        <div class="flex items-center space-x-4">
+            <button onclick="goToScreen('homeScreen')" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-4 py-2 rounded-full shadow transition flex items-center space-x-2 text-sm">
+                <i class="fa-solid fa-house"></i>
+                <span>Volver al Inicio</span>
+            </button>
+            <button onclick="goToScreen('diaryScreen')" class="bg-emerald-700 hover:bg-emerald-600 text-white font-semibold px-3 py-2 rounded-lg text-sm flex items-center space-x-2">
+                <i class="fa-solid fa-book-open"></i>
+                <span>Diario</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- CONTENEDOR PRINCIPAL DE PANTALLAS -->
+    <main class="flex-grow container mx-auto p-4 max-w-5xl">
+
+        <!-- 1. PANTALLA DE INICIO -->
+        <section id="homeScreen" class="screen slide-in py-8 text-center">
+            <div class="max-w-2xl mx-auto bg-slate-800 border border-slate-700 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-3xl"></div>
+                <div class="inline-block bg-amber-500/20 text-amber-300 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
+                    Recurso Educativo Digital - Grados 6° y 7°
+                </div>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2">EXPEDICIÓN COLOMBIA</h1>
+                <p class="text-xl text-emerald-400 font-semibold mb-6">Exploradores de la Biodiversidad</p>
+                
+                <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-700 text-left mb-8 text-slate-300 text-sm md:text-base leading-relaxed">
+                    <p class="mb-2"><strong class="text-amber-300">¡Misión de Exploración!</strong> Colombia es uno de los territorios más biodiversos del planeta.</p>
+                    <p>Tu misión es recorrer las seis regiones naturales, descubrir sus ecosistemas, comprender las adaptaciones de los seres vivos y registrar tus hallazgos en el Diario del Explorador.</p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button onclick="startExpedition()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition transform hover:-translate-y-0.5 flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-play"></i>
+                        <span>Iniciar Expedición</span>
+                    </button>
+                    <button onclick="goToScreen('teacherScreen')" class="bg-slate-700 hover:bg-slate-600 text-slate-200 font-bold py-3 px-6 rounded-xl transition flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-chalkboard-user"></i>
+                        <span>Espacio Docente</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. SELECCIÓN DE TRANSPORTE -->
+        <section id="transportScreen" class="screen slide-in hidden py-6 text-center">
+            <h2 class="text-3xl font-bold text-white mb-2">Elige tu Medio de Transporte</h2>
+            <p class="text-slate-400 mb-6">Selecciona cómo deseas viajar hacia la región seleccionada:</p>
+            
+            <div id="selectedRegionTitle" class="text-amber-400 font-bold text-lg mb-6"></div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl mx-auto mb-8">
+                <div onclick="selectTransport('Bicicleta', 'ring')" class="transport-card bg-slate-800 border-2 border-slate-700 hover:border-emerald-500 p-5 rounded-2xl cursor-pointer transition text-center">
+                    <i class="fa-solid fa-bicycle text-4xl text-emerald-400 mb-3"></i>
+                    <h3 class="font-bold text-white">Bicicleta</h3>
+                    <p class="text-xs text-slate-400 mt-1">Ideal para caminos rurales</p>
+                </div>
+                <div onclick="selectTransport('Motocicleta', 'moto')" class="transport-card bg-slate-800 border-2 border-slate-700 hover:border-emerald-500 p-5 rounded-2xl cursor-pointer transition text-center">
+                    <i class="fa-solid fa-motorcycle text-4xl text-emerald-400 mb-3"></i>
+                    <h3 class="font-bold text-white">Motocicleta</h3>
+                    <p class="text-xs text-slate-400 mt-1">Veloz en carreteras destapadas</p>
+                </div>
+                <div onclick="selectTransport('Automóvil', 'car')" class="transport-card bg-slate-800 border-2 border-slate-700 hover:border-emerald-500 p-5 rounded-2xl cursor-pointer transition text-center">
+                    <i class="fa-solid fa-car text-4xl text-emerald-400 mb-3"></i>
+                    <h3 class="font-bold text-white">Automóvil</h3>
+                    <p class="text-xs text-slate-400 mt-1">Cómodo para autopistas</p>
+                </div>
+                <div onclick="selectTransport('Chiva', 'bus')" class="transport-card bg-slate-800 border-2 border-slate-700 hover:border-emerald-500 p-5 rounded-2xl cursor-pointer transition text-center">
+                    <i class="fa-solid fa-bus text-4xl text-emerald-400 mb-3"></i>
+                    <h3 class="font-bold text-white">Chiva Tradicional</h3>
+                    <p class="text-xs text-slate-400 mt-1">Cultura y caminos andinos</p>
+                </div>
+                <div onclick="selectTransport('Avión', 'plane')" class="transport-card bg-slate-800 border-2 border-slate-700 hover:border-emerald-500 p-5 rounded-2xl cursor-pointer transition text-center">
+                    <i class="fa-solid fa-plane text-4xl text-emerald-400 mb-3"></i>
+                    <h3 class="font-bold text-white">Avión</h3>
+                    <p class="text-xs text-slate-400 mt-1">Para trayectos largos o insulares</p>
+                </div>
+                <div onclick="selectTransport('Canoa', 'boat')" class="transport-card bg-slate-800 border-2 border-slate-700 hover:border-emerald-500 p-5 rounded-2xl cursor-pointer transition text-center">
+                    <i class="fa-solid fa-ship text-4xl text-emerald-400 mb-3"></i>
+                    <h3 class="font-bold text-white">Canoa</h3>
+                    <p class="text-xs text-slate-400 mt-1">Esencial en ríos y selvas</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. PANTALLA DE SIMULACIÓN DE VIAJE (TRAYECTO ANIMADO) -->
+        <section id="travelAnimationScreen" class="screen slide-in hidden py-12 text-center">
+            <div class="max-w-xl mx-auto bg-slate-800 border border-slate-700 p-8 rounded-3xl shadow-xl">
+                <h3 class="text-2xl font-bold text-white mb-2">Viajando hacia el destino...</h3>
+                <p id="travelStatusText" class="text-emerald-400 mb-6 font-semibold">Reproduciendo sonido de transporte y avanzando...</p>
+                
+                <!-- Animación con explorador grande -->
+                <div class="relative h-32 bg-slate-900 rounded-2xl border border-slate-700 overflow-hidden flex items-center px-6 mb-6">
+                    <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                    <div id="travelerAnimationContainer" class="flex items-center justify-between w-full relative z-10 transition-all duration-1000">
+                        <div class="text-5xl animate-bounce" id="travelerAvatar">🎒</div>
+                        <div class="text-4xl text-emerald-500 animate-pulse" id="transportIconDisplay">🚗</div>
+                        <div class="text-4xl">📍</div>
+                    </div>
+                </div>
+                <div class="w-full bg-slate-700 rounded-full h-3 mb-4 overflow-hidden">
+                    <div id="travelProgressBar" class="bg-emerald-500 h-full w-0 transition-all duration-3000"></div>
+                </div>
+                <p class="text-xs text-slate-400">Escucha atentamente el sonido ambiental del vehículo durante el trayecto.</p>
+            </div>
+        </section>
+
+        <!-- 4. MAPA INTERACTIVO DE COLOMBIA (6 REGIONES) -->
+        <section id="mapScreen" class="screen slide-in hidden py-6">
+            <div class="text-center mb-6">
+                <h2 class="text-3xl font-bold text-white">Mapa de Regiones Naturales de Colombia</h2>
+                <p class="text-slate-400">Selecciona una región para iniciar su exploración científica:</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Caribe -->
+                <div onclick="openRegion('Caribe')" class="bg-slate-800 border border-slate-700 hover:border-emerald-500 p-6 rounded-2xl cursor-pointer shadow-lg transition transform hover:-translate-y-1">
+                    <div class="text-3xl mb-3">🌴</div>
+                    <h3 class="text-xl font-bold text-white mb-1">Región Caribe</h3>
+                    <p class="text-xs text-slate-400 mb-4">Planicies costeras, mar cálido y el imponente Parque Tayrona.</p>
+                    <span class="text-xs bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full font-semibold">Explorar Región</span>
+                </div>
+                <!-- Andina -->
+                <div onclick="openRegion('Andina')" class="bg-slate-800 border border-slate-700 hover:border-emerald-500 p-6 rounded-2xl cursor-pointer shadow-lg transition transform hover:-translate-y-1">
+                    <div class="text-3xl mb-3">⛰️</div>
+                    <h3 class="text-xl font-bold text-white mb-1">Región Andina</h3>
+                    <p class="text-xs text-slate-400 mb-4">Tres cordilleras, pisos térmicos variados y páramos mágicos.</p>
+                    <span class="text-xs bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full font-semibold">Explorar Región</span>
+                </div>
+                <!-- Pacífica -->
+                <div onclick="openRegion('Pacifica')" class="bg-slate-800 border border-slate-700 hover:border-emerald-500 p-6 rounded-2xl cursor-pointer shadow-lg transition transform hover:-translate-y-1">
+                    <div class="text-3xl mb-3">🌊</div>
+                    <h3 class="text-xl font-bold text-white mb-1">Región Pacífica</h3>
+                    <p class="text-xs text-slate-400 mb-4">Selva húmeda tropical, manglares y alta pluviosidad.</p>
+                    <span class="text-xs bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full font-semibold">Explorar Región</span>
+                </div>
+                <!-- Orinoquía -->
+                <div onclick="openRegion('Orinoquia')" class="bg-slate-800 border border-slate-700 hover:border-emerald-500 p-6 rounded-2xl cursor-pointer shadow-lg transition transform hover:-translate-y-1">
+                    <div class="text-3xl mb-3">🌾</div>
+                    <h3 class="text-xl font-bold text-white mb-1">Región de la Orinoquía</h3>
+                    <p class="text-xs text-slate-400 mb-4">Amplias sabanas, llanuras inundables y biodiversidad de esteros.</p>
+                    <span class="text-xs bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full font-semibold">Explorar Región</span>
+                </div>
+                <!-- Amazonía -->
+                <div onclick="openRegion('Amazonia')" class="bg-slate-800 border border-slate-700 hover:border-emerald-500 p-6 rounded-2xl cursor-pointer shadow-lg transition transform hover:-translate-y-1">
+                    <div class="text-3xl mb-3">🦜</div>
+                    <h3 class="text-xl font-bold text-white mb-1">Región de la Amazonía</h3>
+                    <p class="text-xs text-slate-400 mb-4">El pulmón del mundo, ríos caudalosos y densa selva virgen.</p>
+                    <span class="text-xs bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full font-semibold">Explorar Región</span>
+                </div>
+                <!-- Insular -->
+                <div onclick="openRegion('Insular')" class="bg-slate-800 border border-slate-700 hover:border-emerald-500 p-6 rounded-2xl cursor-pointer shadow-lg transition transform hover:-translate-y-1">
+                    <div class="text-3xl mb-3">🏝️</div>
+                    <h3 class="text-xl font-bold text-white mb-1">Región Insular</h3>
+                    <p class="text-xs text-slate-400 mb-4">Islas oceánicas, cayos y arrecifes coralinos de gran valor.</p>
+                    <span class="text-xs bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full font-semibold">Explorar Región</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. PANTALLA DE EXPLORACIÓN DE REGIÓN -->
+        <section id="regionScreen" class="screen slide-in hidden py-6">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <span id="regionBadge" class="text-xs bg-amber-500/20 text-amber-300 px-3 py-1 rounded-full font-semibold uppercase">Región</span>
+                    <h2 id="regionTitleName" class="text-3xl font-extrabold text-white mt-1">Nombre de Región</h2>
+                </div>
+                <button onclick="goToScreen('mapScreen')" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-xl text-sm font-semibold text-slate-200">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Volver al Mapa
+                </button>
+            </div>
+
+            <!-- Pestañas de Navegación en la Región -->
+            <div class="flex flex-wrap gap-2 mb-6 border-b border-slate-700 pb-3">
+                <button onclick="switchTab('environment')" id="btnTabEnv" class="tab-btn bg-emerald-600 text-white px-4 py-2 rounded-xl font-semibold text-sm transition">1. Ambiente y Geografía</button>
+                <button onclick="switchTab('species')" id="btnTabSp" class="tab-btn bg-slate-800 text-slate-300 px-4 py-2 rounded-xl font-semibold text-sm transition">2. Especies y Adaptaciones</button>
+                <button onclick="switchTab('mission')" id="btnTabMis" class="tab-btn bg-slate-800 text-slate-300 px-4 py-2 rounded-xl font-semibold text-sm transition">3. Misión de Desafío</button>
+            </div>
+
+            <!-- CONTENIDO PESTAÑA 1: AMBIENTE -->
+            <div id="tabEnvironment" class="region-tab-content space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-slate-800 border border-slate-700 p-5 rounded-2xl">
+                        <div class="text-2xl mb-2">📍</div>
+                        <h4 class="font-bold text-white text-lg mb-1">Ubicación</h4>
+                        <p id="envUbicacion" class="text-slate-300 text-sm leading-relaxed"></p>
+                    </div>
+                    <div class="bg-slate-800 border border-slate-700 p-5 rounded-2xl">
+                        <div class="text-2xl mb-2">☀️</div>
+                        <h4 class="font-bold text-white text-lg mb-1">Clima</h4>
+                        <p id="envClima" class="text-slate-300 text-sm leading-relaxed"></p>
+                    </div>
+                    <div class="bg-slate-800 border border-slate-700 p-5 rounded-2xl">
+                        <div class="text-2xl mb-2">⛰️</div>
+                        <h4 class="font-bold text-white text-lg mb-1">Relieve y Geología</h4>
+                        <p id="envRelieve" class="text-slate-300 text-sm leading-relaxed"></p>
+                    </div>
+                    <div class="bg-slate-800 border border-slate-700 p-5 rounded-2xl">
+                        <div class="text-2xl mb-2">🌿</div>
+                        <h4 class="font-bold text-white text-lg mb-1">Ecosistemas</h4>
+                        <p id="envEcosistemas" class="text-slate-300 text-sm leading-relaxed"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTENIDO PESTAÑA 2: ESPECIES CON VIDEOS DE YOUTUBE -->
+            <div id="tabSpecies" class="region-tab-content hidden space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="speciesContainer">
+                    <!-- Dinámico por región -->
+                </div>
+            </div>
+
+            <!-- CONTENIDO PESTAÑA 3: MISIÓN / DESAFÍO (CON ALTO CONTRASTE EN OPCIONES) -->
+            <div id="tabMission" class="region-tab-content hidden">
+                <div class="bg-slate-800 border border-slate-700 p-6 rounded-3xl max-w-2xl mx-auto shadow-xl">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <span class="bg-amber-500/20 text-amber-300 px-3 py-1 rounded-full text-xs font-bold">Desafío Científico</span>
+                        <h4 id="missionTitle" class="font-bold text-white text-lg">Pregunta de Misión</h4>
+                    </div>
+                    <p id="missionQuestion" class="text-slate-200 mb-6 text-base font-medium"></p>
+                    
+                    <!-- Opciones de alta legibilidad (Fondo claro, texto oscuro) -->
+                    <div id="missionOptions" class="space-y-3 mb-6">
+                        <!-- Generado por JS -->
+                    </div>
+                    
+                    <div id="missionFeedback" class="hidden p-4 rounded-xl text-sm font-semibold"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. DIARIO DEL EXPLORADOR (FONDO VERDE OSCURO Y TEXTO BLANCO) -->
+        <section id="diaryScreen" class="screen slide-in hidden py-6">
+            <div class="max-w-3xl mx-auto bg-emerald-950 border border-emerald-800 p-8 rounded-3xl shadow-2xl text-white">
+                <div class="flex justify-between items-center mb-6 border-b border-emerald-800 pb-4">
+                    <div>
+                        <h2 class="text-3xl font-extrabold text-amber-300">Diario del Explorador</h2>
+                        <p class="text-emerald-200 text-sm">Registro oficial de expediciones y descubrimientos científicos</p>
+                    </div>
+                    <button onclick="goToScreen('mapScreen')" class="bg-emerald-800 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-sm font-semibold">
+                        Regresar al Mapa
+                    </button>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="bg-emerald-900/80 p-5 rounded-2xl border border-emerald-700">
+                        <h3 class="font-bold text-amber-300 mb-2"><i class="fa-solid fa-map-location-dot mr-2"></i> Regiones Visitadas</h3>
+                        <p id="diaryRegions" class="text-emerald-100 text-sm">Aún no has completado misiones en ninguna región.</p>
+                    </div>
+                    <div class="bg-emerald-900/80 p-5 rounded-2xl border border-emerald-700">
+                        <h3 class="font-bold text-amber-300 mb-2"><i class="fa-solid fa-paw mr-2"></i> Especies y Adaptaciones Descubiertas</h3>
+                        <p id="diarySpecies" class="text-emerald-100 text-sm">Completa desafíos para desbloquear fichas de especies.</p>
+                    </div>
+                    <div class="bg-emerald-900/80 p-5 rounded-2xl border border-emerald-700">
+                        <h3 class="font-bold text-amber-300 mb-2"><i class="fa-solid fa-award mr-2"></i> Insignias de Insurgencia Científica</h3>
+                        <div id="diaryBadges" class="flex flex-wrap gap-2 text-sm text-emerald-200">
+                            <span>Ninguna insignia obtenida todavía.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. ESPACIO DOCENTE -->
+        <section id="teacherScreen" class="screen slide-in hidden py-6">
+            <div class="max-w-3xl mx-auto bg-slate-800 border border-slate-700 p-8 rounded-3xl shadow-xl">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-white">Espacio Docente y Orientaciones Pedagógicas</h2>
+                    <button onclick="goToScreen('homeScreen')" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-xl text-sm font-semibold text-slate-200">
+                        Volver
+                    </button>
+                </div>
+
+                <div class="space-y-6 text-sm text-slate-300 leading-relaxed">
+                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-700">
+                        <h3 class="font-bold text-amber-300 mb-1">Estándares Básicos de Competencias (MEN)</h3>
+                        <p><strong>Ciencias Naturales:</strong> Establezco adaptaciones de seres vivos en ecosistemas colombianos y explico diversidad biológica por tectónica de placas y clima.</p>
+                        <p class="mt-1"><strong>Ciencias Sociales:</strong> Describo características para dividir a Colombia en regiones naturales.</p>
+                    </div>
+                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-700">
+                        <h3 class="font-bold text-amber-300 mb-1">Criterios de Evaluación</h3>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Rigurosidad en la identificación geográfica y climática de cada región.</li>
+                            <li>Comprensión de las adaptaciones morfológicas y fisiológicas de la fauna y flora.</li>
+                            <li>Participación activa en los desafíos de simulación y registro riguroso en el diario.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MOTOR DE AUDIO Y JAVASCRIPT INTEGRADO -->
+    <script>
+        let currentRegion = '';
+        let selectedTransportType = '';
+        let visitedRegions = JSON.parse(localStorage.getItem('colombia_visited') || '[]');
+        let discoveredSpecies = JSON.parse(localStorage.getItem('colombia_species') || '[]');
+
+        // Base de datos detallada de regiones
+        const regionData = {
+            Caribe: {
+                title: "Región Caribe",
+                badge: "Costa Norte y Planicies",
+                ubicacion: "Ubicada en el norte de Colombia, bañada por el mar Caribe, abarcando desde el golfo de Urabá hasta la península de La Guajira.",
+                clima: "Predominantemente cálido y seco en la Guajira, con zonas tropicales húmedas en la Sierra Nevada de Santa Marta y la depresión momposina.",
+                relieve: "Planicies extensas, valles aluviales y formaciones montañosas aisladas de gran altura como la Sierra Nevada de Santa Marta.",
+                ecosistemas: "Arrecifes coralinos, manglares, bosques secos tropicales y desiertos xerofíticos.",
+                species: [
+                    { name: "Caimán Agujero (Crocodylus acutus)", hab: "Manglares y estuarios", adap: "Válvulas en fosas nasales y orejas para sumergirse.", ytQuery: "Caimán aguja Colombia" },
+                    { name: "Mono Tití Cabeciblanco", hab: "Bosque seco tropical", adap: "Tamaño pequeño para saltar entre ramas y cola larga para equilibrio.", ytQuery: "Titi cabeciblanco adaptaciones" },
+                    { name: "Flamenco Rosado", hab: "Lagunas costeras de La Guajira", adap: "Pico filtrador especializado en crustáceos que pigmentan su plumaje.", ytQuery: "Flamencos rosados Guajira" }
+                ],
+                mission: {
+                    q: "¿Qué adaptación permite al Caimán Aguja sobrevivir en ambientes estuarinos salobres?",
+                    options: [
+                        "Posee glándulas especiales y válvulas para regular el agua y salinidad sin afectar su respiración.",
+                        "Respira exclusivamente a través de branquias como los peces marinos.",
+                        "Migra todos los años hacia los ríos andinos de alta montaña fría."
+                    ],
+                    correct: 0,
+                    explanation: "Correcto. El caimán aguja posee adaptaciones fisiológicas que le permiten tolerar ambientes salobres en manglares."
+                }
+            },
+            Andina: {
+                title: "Región Andina",
+                badge: "Cordilleras y Pisos Térmicos",
+                ubicacion: "Centro del país, dividida en tres cordilleras (Occidental, Central y Oriental) que forman valles interandinos fértiles.",
+                clima: "Variado por pisos térmicos (cálido, templado, frío, páramo y glacial), con lluvias estacionales.",
+                relieve: "Montañoso complejo, volcanes activos, cañones profundos y altiplanos elevados como la Sabana de Bogotá.",
+                ecosistemas: "Páramos de alta montaña, bosques de niebla y selvas andinas.",
+                species: [
+                    { name: "Cóndor de los Andes (Vultur gryphus)", hab: "Cimas andinas y páramos", adap: "Envergadura alar gigante para planear aprovechando corrientes térmicas.", ytQuery: "Condor de los Andes adaptaciones" },
+                    { name: "Oso de Anteojos (Tremarctos ornatus)", hab: "Bosque andino y páramo", adap: "Uñas fuertes y adaptadas para trepar árboles en busca de bromelias.", ytQuery: "Oso de anteojos Colombia" },
+                    { name: "Frailejón (Espeletia)", hab: "Páramo", adap: "Hojas con vellosidades densas que retienen calor y protegen de heladas.", ytQuery: "Frailejones adaptaciones paramo" }
+                ],
+                mission: {
+                    q: "¿Cómo se benefician los frailejones de sus hojas cubiertas de vellosidades densas en el páramo?",
+                    options: [
+                        "Para repeler la luz solar directa y evitar congelación por bajas temperaturas nocturnas.",
+                        "Para camuflarse de los depredadores herbívoros nocturnos.",
+                        "Para producir frutos dulces que atraen aves polinizadoras."
+                    ],
+                    correct: 0,
+                    explanation: "¡Exacto! Las vellosidades densas actúan como abrigo térmico ante las fuertes heladas del páramo."
+                }
+            },
+            Pacifica: {
+                title: "Región Pacífica",
+                badge: "Selva Húmeda y Lluvias",
+                ubicacion: "Franja occidental del país entre la cordillera Occidental y el océano Pacífico, bordeando con Panamá y Ecuador.",
+                clima: "Ecuatorial húmedo con precipitaciones de las más altas del planeta y temperaturas cálidas constantes.",
+                relieve: "Serranía del Baudó, tierras bajas cenagosas, esteros y manglares extensos.",
+                ecosistemas: "Selva pluvial tropical, manglares estuarinos y arrecifes coralinos insulares.",
+                species: [
+                    { name: "Ballena Yubarta (Megaptera novaeangliae)", hab: "Costas del Pacífico", adap: "Capa gruesa de grasa subcutánea y migraciones estelares hacia aguas cálidas.", ytQuery: "Ballena yubarta Pacifico colombiano" },
+                    { name: "Rana Dorada Venenosa (Phyllobates terribilis)", hab: "Suelo de selva húmeda", adap: "Toxinas potentes en la piel como mecanismo defensivo aposemático.", ytQuery: "Rana dorada venenosa" },
+                    { name: "Manglar Rojo", hab: "Zonas intermareales", adap: "Raíces zancos aéreas para respirar en suelos fangosos inundados.", ytQuery: "Manglar rojo adaptaciones" }
+                ],
+                mission: {
+                    q: "¿Por qué el mangle rojo desarrolla raíces aéreas en forma de zanco en la región Pacífica?",
+                    options: [
+                        "Para obtener oxígeno en suelos fangosos y anóxicos inundados por mareas.",
+                        "Para absorber agua directamente de las nubes durante las tormentas eléctricas.",
+                        "Para anclar la planta firmemente y evitar ser devorada por canguros acuáticos."
+                    ],
+                    correct: 0,
+                    explanation: "¡Correcto! Las raíces aéreas permiten el intercambio gaseoso en suelos donde escasea el oxígeno."
+                }
+            },
+            Orinoquia: {
+                title: "Región de la Orinoquía",
+                badge: "Llanuras y Sabanas",
+                ubicacion: "Oriente colombiano, comprendida entre los ríos Arauca, Guaviare y el piedemonte llanero-andino.",
+                clima: "Tropical de sabana con dos estaciones bien marcadas: época de invierno (lluvias) y verano (sequía extrema).",
+                relieve: "Vastas planicies, sabanas abiertas, galerías boscosas ribereñas y mesetas.",
+                ecosistemas: "Sabanas tropicales, bosques de galería y humedales de esteros.",
+                species: [
+                    { name: "Chigüire (Hydrochoerus hydrochaeris)", hab: "Humedales y sabanas inundables", adap: "Estilo de vida semiacuático y patas parcialmente palmeadas.", ytQuery: "Chiguire en los llanos orientales" },
+                    { name: "Caimán del Orinoco (Crocodylus intermedius)", hab: "Rios llaneros", adap: "Hocico estrecho especializado en la captura rápida de peces.", ytQuery: "Caiman del Orinoco" },
+                    { name: "Garza Blanca", hab: "Esteros y sabanas", adap: "Patas largas para caminar en zonas cenagosas sin hundirse.", ytQuery: "Garza blanca sabana" }
+                ],
+                mission: {
+                    q: "¿Cómo afronta el Chigüire las épocas de sequía extrema en las sabanas de la Orinoquía?",
+                    options: [
+                        "Permaneciendo cerca de cuerpos de agua remanentes y esteros para termorregularse.",
+                        "Migrando hacia las cumbres nevadas de la Cordillera Central.",
+                        "hibernando bajo tierra durante seis meses sin consumir líquidos."
+                    ],
+                    correct: 0,
+                    explanation: "Correcto. El chigüire depende estrictamente de fuentes hídricas para sobrevivir a los periodos secos."
+                }
+            },
+            Amazonia: {
+                title: "Región de la Amazonía",
+                badge: "Selva y Biodiversidad",
+                ubicacion: "Suroriente de Colombia, abarcando departamentos como Amazonas, Caquetá, Guainía, Guaviare, Putumayo y Vaupés.",
+                clima: "Cálido, húmedo y lluvioso todo el año, con alta evapotranspiración selvática.",
+                relieve: "Tierras bajas onduladas, planicies aluviales y mesetas amazónicas (tepuyes).",
+                ecosistemas: "Selva húmeda tropical densa, ríos caudalosos (Amazonas, Caquetá, Putumayo) e igapós inundables.",
+                species: [
+                    { name: "Delfín Rosado (Inia geoffrensis)", hab: "Ríos y lagunas amazónicas", adap: "Vértebras cervicales no fusionadas que permiten girar la cabeza 180° entre árboles inundados.", ytQuery: "Delfin rosado adaptaciones" },
+                    { name: "Jaguar (Panthera onca)", hab: "Selva densa", adap: "Excelente nadador, visión nocturna y mordedura potente para romper caparazones.", ytQuery: "Jaguar selva amazonica" },
+                    { name: "Victoria Amazónica", hab: "Ciénagas y lagunas tranquilas", adap: "Hojas flotantes gigantes con bordes elevados para maximizar captura solar.", ytQuery: "Victoria amazonica" }
+                ],
+                mission: {
+                    q: "¿Qué ventaja evolutiva ofrece la flexibilidad cervical en el Delfín Rosado de la Amazonía?",
+                    options: [
+                        "Le permite maniobrar con precisión y cazar peces entre los troncos de la selva inundada.",
+                        "Le ayuda a volar fuera del agua para escapar de depredadores aéreos.",
+                        "Facilita la flotación estática en aguas abiertas sin gastar energía."
+                    ],
+                    correct: 0,
+                    explanation: "¡Excelente! Sus vértebras flexibles son clave para navegar y cazar en bosques inundados (igapós)."
+                }
+            },
+            Insular: {
+                title: "Región Insular",
+                badge: "Islas y Cayos Oceánicos",
+                ubicacion: "Comprende las islas y cayos en el mar Caribe (San Andrés, Providencia y Santa Catalina) y en el océano Pacífico (Malpelo y Gorgona).",
+                clima: "Cálido marino tropical, suavizado por vientos alisios oceánicos.",
+                relieve: "Plataformas coralinas y elevaciones volcánicas insulares.",
+                ecosistemas: "Arrecifes de barrera coralina, manglares insulares y bosques tropicales secos.",
+                species: [
+                    { name: "Cangrejo Negro de Providencia", hab: "Bosques y manglares de Providencia", adap: "Migración masiva hacia el mar para liberar huevos en ciclo lunar.", ytQuery: "Cangrejo negro Providencia" },
+                    { name: "Tiburón Martillo (Sphyrna lewini)", hab: "Aguas profundas alrededor de Malpelo", adap: "Cabeza en forma de martillo (cefalofólio) para ampliar campo visual y electrorrecepción.", ytQuery: "Tiburon martillo Malpelo" },
+                    { name: "Iguana Verde", hab: "Copas de árboles insulares", adap: "Excelente camuflaje verde y cola larga como timón en saltos.", ytQuery: "Iguana verde adaptaciones" }
+                ],
+                mission: {
+                    q: "¿Qué función cumple el cefalofólio (cabeza ensanchada) en el Tiburón Martillo de Malpelo?",
+                    options: [
+                        "Optimiza su visión panorámica de 360 grados y mejora la detección de campos eléctricos de sus presas.",
+                        "Funciona como una vela para impulsarse con las corrientes marinas profundas.",
+                        "Sirve para almacenar oxígeno puro durante largas inmersiones."
+                    ],
+                    correct: 0,
+                    explanation: "¡Correcto! Su cabeza en forma de martillo le otorga una ventaja sensorial y visual única en la caza."
+                }
+            }
+        };
+
+        // Navegación general entre pantallas
+        function goToScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+            document.getElementById(screenId).classList.remove('hidden');
+            window.scrollTo(0, 0);
+            if(screenId === 'diaryScreen') updateDiary();
+        }
+
+        // Iniciar expedición -> lleva a selección de transporte
+        function startExpedition() {
+            goToScreen('transportScreen');
+        }
+
+        // Seleccionar transporte y reproducir sonido sintetizado de transporte
+        function selectTransport(transportName, soundType) {
+            selectedTransportType = transportName;
+            playTransportSound(soundType);
+            goToScreen('travelAnimationScreen');
+
+            // Animar barra de progreso y avatar
+            const progressBar = document.getElementById('travelProgressBar');
+            progressBar.style.width = '0%';
+            setTimeout(() => { progressBar.style.width = '100%'; }, 100);
+
+            setTimeout(() => {
+                goToScreen('mapScreen');
+            }, 3500);
+        }
+
+        // Generador de sonidos de transporte usando Web Audio API (Sin archivos externos caídos)
+        function playTransportSound(type) {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if(type === 'moto') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(80, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(180, audioCtx.currentTime + 3);
+                } else if(type === 'plane') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                    osc.frequency.linearRampToValueAtTime(300, audioCtx.currentTime + 3);
+                } else if(type === 'ring') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(1200, audioCtx.currentTime + 0.1);
+                } else {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(100, audioCtx.currentTime);
+                }
+
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 3);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 3);
+            } catch(e) { console.log('Audio not supported or blocked'); }
+        }
+
+        // Abrir región específica
+        function openRegion(regionKey) {
+            currentRegion = regionKey;
+            const data = regionData[regionKey];
+
+            document.getElementById('regionBadge').innerText = data.badge;
+            document.getElementById('regionTitleName').innerText = data.title;
+
+            // Llenar pestaña ambiente
+            document.getElementById('envUbicacion').innerText = data.ubicacion;
+            document.getElementById('envClima').innerText = data.clima;
+            document.getElementById('envRelieve').innerText = data.relieve;
+            document.getElementById('envEcosistemas').innerText = data.ecosistemas;
+
+            // Llenar especies con enlaces de YouTube
+            const spContainer = document.getElementById('speciesContainer');
+            spContainer.innerHTML = '';
+            data.species.forEach(sp => {
+                const ytUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(sp.ytQuery)}`;
+                spContainer.innerHTML += `
+                    <div class="bg-slate-800 border border-slate-700 p-5 rounded-2xl flex flex-col justify-between">
+                        <div>
+                            <div class="text-3xl mb-2">🐾</div>
+                            <h4 class="font-bold text-white text-base mb-1">${sp.name}</h4>
+                            <p class="text-xs text-emerald-400 font-semibold mb-2">Hábitat: ${sp.hab}</p>
+                            <p class="text-xs text-slate-300 mb-4">${sp.adap}</p>
+                        </div>
+                        <a href="${ytUrl}" target="_blank" class="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-3 rounded-xl text-xs text-center transition flex items-center justify-center space-x-2">
+                            <i class="fa-brands fa-youtube text-sm"></i>
+                            <span>Ver en YouTube</span>
+                        </a>
+                    </div>
+                `;
+            });
+
+            // Llenar misión
+            setupMission(data.mission);
+
+            // Registrar visita
+            if(!visitedRegions.includes(regionKey)) {
+                visitedRegions.push(regionKey);
+                localStorage.setItem('colombia_visited', JSON.stringify(visitedRegions));
+            }
+
+            switchTab('environment');
+            goToScreen('regionScreen');
+        }
+
+        // Cambiar pestañas dentro de la región
+        function switchTab(tabName) {
+            document.getElementById('tabEnvironment').classList.add('hidden');
+            document.getElementById('tabSpecies').classList.add('hidden');
+            document.getElementById('tabMission').classList.add('hidden');
+
+            document.getElementById('btnTabEnv').className = "tab-btn bg-slate-800 text-slate-300 px-4 py-2 rounded-xl font-semibold text-sm transition";
+            document.getElementById('btnTabSp').className = "tab-btn bg-slate-800 text-slate-300 px-4 py-2 rounded-xl font-semibold text-sm transition";
+            document.getElementById('btnTabMis').className = "tab-btn bg-slate-800 text-slate-300 px-4 py-2 rounded-xl font-semibold text-sm transition";
+
+            if(tabName === 'environment') {
+                document.getElementById('tabEnvironment').classList.remove('hidden');
+                document.getElementById('btnTabEnv').className = "tab-btn bg-emerald-600 text-white px-4 py-2 rounded-xl font-semibold text-sm transition";
+            } else if(tabName === 'species') {
+                document.getElementById('tabSpecies').classList.remove('hidden');
+                document.getElementById('btnTabSp').className = "tab-btn bg-emerald-600 text-white px-4 py-2 rounded-xl font-semibold text-sm transition";
+            } else if(tabName === 'mission') {
+                document.getElementById('tabMission').classList.remove('hidden');
+                document.getElementById('btnTabMis').className = "tab-btn bg-emerald-600 text-white px-4 py-2 rounded-xl font-semibold text-sm transition";
+            }
+        }
+
+        // Configurar misión con alto contraste en opciones
+        function setupMission(missionObj) {
+            document.getElementById('missionQuestion').innerText = missionObj.q;
+            const optContainer = document.getElementById('missionOptions');
+            optContainer.innerHTML = '';
+            document.getElementById('missionFeedback').classList.add('hidden');
+
+            missionObj.options.forEach((opt, idx) => {
+                optContainer.innerHTML += `
+                    <button onclick="checkAnswer(${idx}, ${missionObj.correct}, '${missionObj.explanation.replace(/'/g, "\\'")}')" 
+                        class="w-full text-left bg-slate-100 hover:bg-emerald-100 text-slate-900 font-medium p-4 rounded-xl shadow transition border border-slate-300 text-sm md:text-base">
+                        <strong class="text-emerald-700 mr-2">Opción ${idx+1}:</strong> ${opt}
+                    </button>
+                `;
+            });
+        }
+
+        // Comprobar respuesta de la misión
+        function checkAnswer(selected, correct, explanation) {
+            const feedback = document.getElementById('missionFeedback');
+            feedback.classList.remove('hidden');
+            if(selected === correct) {
+                feedback.className = "p-4 rounded-xl text-sm font-semibold bg-emerald-600 text-white";
+                feedback.innerHTML = `<i class="fa-solid fa-circle-check mr-2"></i> ¡Correcto! ${explanation}`;
+                if(!discoveredSpecies.includes(currentRegion)) {
+                    discoveredSpecies.push(currentRegion);
+                    localStorage.setItem('colombia_species', JSON.stringify(discoveredSpecies));
+                }
+            } else {
+                feedback.className = "p-4 rounded-xl text-sm font-semibold bg-rose-600 text-white";
+                feedback.innerHTML = `<i class="fa-solid fa-circle-xmark mr-2"></i> Incorrecto. Vuelve a intentarlo leyendo con atención la información ambiental.`;
+            }
+        }
+
+        // Actualizar datos del Diario del Explorador
+        function updateDiary() {
+            const regDiv = document.getElementById('diaryRegions');
+            const spDiv = document.getElementById('diarySpecies');
+            const badgeDiv = document.getElementById('diaryBadges');
+
+            regDiv.innerText = visitedRegions.length > 0 ? visitedRegions.join(', ') : "Aún no has visitado ninguna región.";
+            spDiv.innerText = discoveredSpecies.length > 0 ? `Desafíos superados en: ${discoveredSpecies.join(', ')}` : "Completa misiones para registrar adaptaciones.";
+            
+            if(visitedRegions.length > 0) {
+                badgeDiv.innerHTML = `<span class="bg-amber-400 text-slate-950 px-3 py-1 rounded-full font-bold text-xs">🏅 Explorador Junior de Colombia (${visitedRegions.length}/6 Regiones)</span>`;
+            } else {
+                badgeDiv.innerHTML = `<span>Ninguna insignia obtenida todavía.</span>`;
+            }
+        }
+    </script>
+</body>
+</html>
